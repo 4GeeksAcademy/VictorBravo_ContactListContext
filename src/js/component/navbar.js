@@ -18,7 +18,7 @@ export const Navbar = () => {
                     <button className="btn retro-navbar-btn btn-danger fw-bold" onClick={() => actions.logout(navigate)}>Cerrar sesión</button>
                 ) : (
                     <>
-                        <button className="btn retro-navbar-btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        <button className="btn retro-navbar-btn fw-bold" data-bs-toggle="modal" data-bs-target="#loginModal">
                             Iniciar sesión
                         </button>
 

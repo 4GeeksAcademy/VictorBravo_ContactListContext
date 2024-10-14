@@ -17,6 +17,11 @@ const getState = ({ getStore, getActions, setStore }) => {
             }
         },
         actions: {
+            // Acción para actualizar el contacto actual
+            setCurrentContact: (contactData) => {
+                setStore({ currentContact: contactData });
+            },
+
             // Acción para mostrar el modal
             setShowModal: (showModal) => {
                 setStore({ showModal }); // Actualiza el valor de showModal en el store

@@ -11,7 +11,7 @@ export const Home = () => (
 			<p>
 				<strong>Inicia sesión para gestionar tus contactos.</strong>
 			</p>
-			<button className="btn retro-navbar-btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#loginModal">
+			<button className="btn retro-navbar-btn fw-bold" data-bs-toggle="modal" data-bs-target="#loginModal">
 				Iniciar sesión
 			</button>
 		</div>
