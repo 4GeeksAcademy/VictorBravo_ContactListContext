@@ -4,46 +4,14 @@ import "../../styles/demo.css";
 
 export const Demo = () => {
 	const { store, actions } = useContext(Context);
-	const [showModal, setShowModal] = useState(false);
-	const [editMode, setEditMode] = useState(false);
-	const [contact, setContact] = useState({
-		name: "",
-		phone: "",
-		email: "",
-		address: ""
-	});
-	const [editingContactId, setEditingContactId] = useState(null);
+	const { showModal, editingContactId, currentContact } = store;
 
-	// Función para manejar la apertura del modal en modo creación
-	const handleCreateContact = () => {
-		setEditMode(false);
-		setContact({ name: "", phone: "", email: "", address: "" });
-		setShowModal(true);
-	};
-
-	// Función para manejar la apertura del modal en modo edición
-	const handleEditContact = (contact) => {
-		setEditMode(true);
-		setContact({ ...contact });
-		setEditingContactId(contact.id);
-		setShowModal(true);
-	};
-
-	// Función para manejar la creación o edición de contacto
-	const handleSaveContact = () => {
-		if (editMode) {
-			actions.updateContact(store.username, editingContactId, contact);
-		} else {
-			actions.createContact(store.username, contact);
-		}
-		setShowModal(false);
-	};
 
 	return (
 		<div className="container text-center mt-5">
 			<h1 className="fw-bold">Lista de Contactos</h1>
 			<div className="list-header d-flex justify-content-end">
-				<button className="btn btn-success mb-4" onClick={handleCreateContact}>
+				<button className="btn btn-success mb-4" onClick={actions.openCreateModal}>
 					Crear Contacto
 				</button>
 			</div>
@@ -65,7 +33,7 @@ export const Demo = () => {
 						<div className="ms-auto d-flex">
 							<button
 								className="btn"
-								onClick={() => handleEditContact(contact)}
+								onClick={() => actions.openEditModal(contact)}
 							>
 								<i className="fas fa-pencil-alt"></i>
 							</button>
@@ -82,61 +50,57 @@ export const Demo = () => {
 
 
 			{showModal && (
-				<div className={`modal ${showModal ? 'show' : ''}`} tabIndex="-1" style={{ display: showModal ? 'block' : 'none' }}>
+				<div className="modal fade show" style={{ display: 'block' }} tabIndex="-1">
 					<div className="modal-dialog">
 						<div className="modal-content">
 							<div className="modal-header">
-								<h5 className="modal-title">{editMode ? "Editar Contacto" : "Crear Contacto"}</h5>
-								<button
-									type="button"
-									className="btn-close"
-									onClick={() => setShowModal(false)}
-								></button>
+								<h5 className="modal-title">{editingContactId ? 'Editar contacto' : 'Crear contacto'}</h5>
+								<button type="button" className="btn-close" onClick={actions.closeModal}></button>
 							</div>
 							<div className="modal-body">
 								<input
 									type="text"
 									className="form-control mb-2"
 									placeholder="Nombre"
-									value={contact.name}
-									onChange={e => setContact({ ...contact, name: e.target.value })}
+									value={currentContact.name}
+									onChange={(e) => actions.setCurrentContact({ ...currentContact, name: e.target.value })}
 								/>
 								<input
 									type="text"
 									className="form-control mb-2"
 									placeholder="Teléfono"
-									value={contact.phone}
-									onChange={e => setContact({ ...contact, phone: e.target.value })}
+									value={currentContact.phone}
+									onChange={(e) => actions.setCurrentContact({ ...currentContact, phone: e.target.value })}
 								/>
 								<input
 									type="email"
 									className="form-control mb-2"
 									placeholder="Email"
-									value={contact.email}
-									onChange={e => setContact({ ...contact, email: e.target.value })}
+									value={currentContact.email}
+									onChange={(e) => actions.setCurrentContact({ ...currentContact, email: e.target.value })}
 								/>
 								<input
 									type="text"
-									className="form-control"
+									className="form-control mb-2"
 									placeholder="Dirección"
-									value={contact.address}
-									onChange={e => setContact({ ...contact, address: e.target.value })}
+									value={currentContact.address}
+									onChange={(e) => actions.setCurrentContact({ ...currentContact, address: e.target.value })}
 								/>
 							</div>
 							<div className="modal-footer">
-								<button
-									type="button"
-									className="btn btn-secondary"
-									onClick={() => setShowModal(false)}
-								>
-									Cerrar
-								</button>
+								<button type="button" className="btn btn-secondary" onClick={actions.closeModal}>Cancelar</button>
 								<button
 									type="button"
 									className="btn btn-primary"
-									onClick={handleSaveContact}
-								>
-									{editMode ? "Guardar Cambios" : "Crear Contacto"}
+									onClick={() => {
+										if (editingContactId) {
+											actions.updateContact(store.username, editingContactId, store.currentContact); // Llama a updateContact en modo edición
+										} else {
+											actions.createContact(store.username, store.currentContact); // Llama a createContact en modo creación
+										}
+										actions.closeModal(); // Cierra el modal después de la acción
+									}}>
+									{editingContactId ? 'Actualizar' : 'Crear'} {/* Cambia el texto del botón según el modo */}
 								</button>
 							</div>
 						</div>

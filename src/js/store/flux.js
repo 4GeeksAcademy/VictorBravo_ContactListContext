@@ -7,10 +7,49 @@ const getState = ({ getStore, getActions, setStore }) => {
             isLogged: false,  // Estado de login
             username: null,   // Nombre de usuario del login
             error: "",        // Mensaje de error o estado
+            showModal: false,    // Estado para manejar la visibilidad del modal
+            editingContactId: null, // ID del contacto que se está editando
+            currentContact: {    // Estado para el contacto actual
+                name: "",
+                phone: "",
+                email: "",
+                address: ""
+            }
         },
         actions: {
+            // Acción para mostrar el modal
+            setShowModal: (showModal) => {
+                setStore({ showModal }); // Actualiza el valor de showModal en el store
+            },
+
+            // Acción para establecer el ID del contacto que se está editando
+            setEditingContactId: (contactId) => {
+                setStore({ editingContactId: contactId }); // Actualiza el valor del ID en el store
+            },
+
+            // Función para cerrar el modal
+            closeModal: (modalId) => {
+                setStore({ showModal: false, editingContactId: null, currentContact: { name: "", phone: "", email: "", address: "" } }); // Resetear estado
+                const modalElement = document.getElementById(modalId);
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance) {
+                    modalInstance.hide(); // Cierra el modal
+                }
+            },
+
+            // Función para abrir el modal en modo creación
+            openCreateModal: () => {
+                setStore({ showModal: true, editingContactId: null, currentContact: { name: "", phone: "", email: "", address: "" } });
+            },
+
+            // Función para abrir el modal en modo edición
+            openEditModal: (contact) => {
+                setStore({ showModal: true, editingContactId: contact.id, currentContact: contact }); // Establecer el contacto en el store
+            },
+
+            // Función para fijar el valor de username
             setUsername: (username) => {
-                setStore({ username }); // Actualiza el valor de username en el store
+                setStore({ username });
             },
 
             // Función para iniciar sesión
@@ -53,15 +92,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
                 } catch (error) {
                     console.error("Error en la solicitud de creación de usuario:", error);
-                }
-            },
-
-            // Función para cerrar el modal
-            closeModal: (modalId) => {
-                const modalElement = document.getElementById(modalId);
-                const modalInstance = bootstrap.Modal.getInstance(modalElement);
-                if (modalInstance) {
-                    modalInstance.hide(); // Cierra el modal
                 }
             },
 
