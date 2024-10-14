@@ -1,15 +1,15 @@
 import React from "react";
-import rigoImage from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 
 export const Home = () => (
-	<div className="text-center mt-5">
-		<h1>Hello Rigo!</h1>
-		<p>
-			<img src={rigoImage} />
+	<div className="container text-center mt-5 retro-style">
+		<h1 className="display-1 fw-bold">Bienvenido a Agenda Virtual</h1>
+		<p className="lead">
+			Organiza tus contactos fácilmente con nuestro estilo retro.
 		</p>
-		<a href="#" className="btn btn-success">
-			If you see this green button, bootstrap is working
-		</a>
+		<p>
+			<strong>Inicia sesión para gestionar tus contactos.</strong>
+		</p>
 	</div>
 );
+

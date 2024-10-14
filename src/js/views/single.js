@@ -1,26 +1,25 @@
-import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
-import { Link, useParams } from "react-router-dom";
+import React, { useContext } from "react";
+import { useParams, Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 
-export const Single = props => {
-	const { store, actions } = useContext(Context);
-	const params = useParams();
+export const Single = () => {
+	const { store } = useContext(Context);
+	const { theid } = useParams();
+	const contact = store.contacts[theid];
+
 	return (
-		<div className="jumbotron">
-			<h1 className="display-4">This will show the demo element: {store.demo[params.theid].title}</h1>
-
-			<hr className="my-4" />
-
-			<Link to="/">
-				<span className="btn btn-primary btn-lg" href="#" role="button">
-					Back home
-				</span>
+		<div className="container text-center mt-5 retro-style">
+			<h1 className="display-4">Detalles del Contacto</h1>
+			<ul className="list-group">
+				<li className="list-group-item"><strong>Nombre:</strong> {contact.name}</li>
+				<li className="list-group-item"><strong>Teléfono:</strong> {contact.phone || "No proporcionado"}</li>
+				<li className="list-group-item"><strong>Email:</strong> {contact.email || "No proporcionado"}</li>
+				<li className="list-group-item"><strong>Dirección:</strong> {contact.address || "No proporcionado"}</li>
+			</ul>
+			<Link to="/demo">
+				<button className="btn btn-primary mt-4">Volver a contactos</button>
 			</Link>
 		</div>
 	);
 };
 
-Single.propTypes = {
-	match: PropTypes.object
-};
